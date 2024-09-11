@@ -20,6 +20,9 @@
     "@types/node": "^22.5.4",
     "@types/redis": "^4.0.10"
   },
+  "engines": {
+    "node": ">=14.x"
+  },
   "dependencies": {
     "@socket.io/redis-adapter": "^8.3.0",
     "bcryptjs": "^2.4.3",
