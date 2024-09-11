@@ -54,8 +54,12 @@ app.use(
     origin: "http://localhost:3000", // Replace with the actual frontend URL
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders: "Content-Type, Authorization",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   })
 );
+
+app.options("*", cors());
 
 app.use("/auth", authRoutes);
 app.use("/getDocuments", documentRouter);
