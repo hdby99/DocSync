@@ -5,7 +5,6 @@ import User from "../models/User";
 
 const router = express.Router();
 
-// Helper function to manually validate input
 const validateSignup = (req: Request) => {
   const { name, email, password } = req.body;
   const errors = [];

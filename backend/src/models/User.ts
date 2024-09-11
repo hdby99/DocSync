@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document as MongooseDocument } from "mongoose";
-import { select } from "slate";
 
 export interface IUser extends MongooseDocument {
   name: string;
