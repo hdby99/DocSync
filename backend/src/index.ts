@@ -114,7 +114,7 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
-  socket.on("send-change", (delta, documentId) => {
+  socket.on("send-change", (delta: any, documentId: string) => {
     // const documentId = socket.data.documentId; // Get the documentId from socket.data
 
     console.log("Emitting changes to room", documentId, "with delta", delta); // Debugging logs
@@ -135,31 +135,55 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
-  socket.on("send-chat", async ({ documentId, userId, message }) => {
-    try {
-      const user = await User.findById(userId).select("name");
-      const chat = await Chat.create({
-        documentId,
-        userId,
-        userName: user?.name,
-        message,
-      });
-      console.log(
-        `${message} sent from ${userId} to all users in ${documentId}`
-      );
-      io.to(documentId).emit("receive-chat", chat);
-    } catch (err) {
-      console.error("Error sending chat:", err);
-      socket.emit("error", { msg: "Failed to send the message." });
+  socket.on(
+    "send-chat",
+    async ({
+      documentId,
+      userId,
+      message,
+    }: {
+      documentId: string;
+      userId: string;
+      message: string;
+    }) => {
+      try {
+        const user = await User.findById(userId).select("name");
+        const chat = await Chat.create({
+          documentId,
+          userId,
+          userName: user?.name,
+          message,
+        });
+        console.log(
+          `${message} sent from ${userId} to all users in ${documentId}`
+        );
+        io.to(documentId).emit("receive-chat", chat);
+      } catch (err) {
+        console.error("Error sending chat:", err);
+        socket.emit("error", { msg: "Failed to send the message." });
+      }
     }
-  });
+  );
 
-  socket.on("send-cursor", async ({ userId, range, documentId }) => {
-    if (documentId) {
-      console.log("sending cursor details to", documentId);
-      socket.broadcast.to(documentId).emit("receive-cursor", { userId, range });
+  socket.on(
+    "send-cursor",
+    async ({
+      userId,
+      range,
+      documentId,
+    }: {
+      userId: string;
+      range: any;
+      documentId: string;
+    }) => {
+      if (documentId) {
+        console.log("sending cursor details to", documentId);
+        socket.broadcast
+          .to(documentId)
+          .emit("receive-cursor", { userId, range });
+      }
     }
-  });
+  );
 
   socket.on("save-document", async (documentId: string, data: any) => {
     try {

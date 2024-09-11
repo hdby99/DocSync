@@ -115,7 +115,7 @@ io.on("connection", (socket) => {
             socket.emit("error", { msg: "Failed to load chat messages." });
         }
     }));
-    socket.on("send-chat", (_a) => __awaiter(void 0, [_a], void 0, function* ({ documentId, userId, message }) {
+    socket.on("send-chat", (_a) => __awaiter(void 0, [_a], void 0, function* ({ documentId, userId, message, }) {
         try {
             const user = yield User_1.default.findById(userId).select("name");
             const chat = yield chat_1.default.create({
@@ -132,10 +132,12 @@ io.on("connection", (socket) => {
             socket.emit("error", { msg: "Failed to send the message." });
         }
     }));
-    socket.on("send-cursor", (_b) => __awaiter(void 0, [_b], void 0, function* ({ userId, range, documentId }) {
+    socket.on("send-cursor", (_b) => __awaiter(void 0, [_b], void 0, function* ({ userId, range, documentId, }) {
         if (documentId) {
             console.log("sending cursor details to", documentId);
-            socket.broadcast.to(documentId).emit("receive-cursor", { userId, range });
+            socket.broadcast
+                .to(documentId)
+                .emit("receive-cursor", { userId, range });
         }
     }));
     socket.on("save-document", (documentId, data) => __awaiter(void 0, void 0, void 0, function* () {

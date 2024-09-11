@@ -13,11 +13,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const User_1 = __importDefault(require("../models/User"));
 const authMiddleware_1 = __importDefault(require("../middlewares/authMiddleware"));
-const express_validator_1 = require("express-validator");
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const userRouter = express_1.default.Router();
+// Helper function to manually validate password change
+const validatePasswordChange = (req) => {
+    const { newPassword } = req.body;
+    const errors = [];
+    if (!newPassword ||
+        typeof newPassword !== "string" ||
+        newPassword.length < 8) {
+        errors.push({ msg: "Password must be 8 or more characters" });
+    }
+    return errors;
+};
+// Route to get user by id
 userRouter.get("/:id", authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield User_1.default.findById(req.params.id);
@@ -30,15 +41,12 @@ userRouter.get("/:id", authMiddleware_1.default, (req, res) => __awaiter(void 0,
         return res.status(500).json({ message: "Server error" });
     }
 }));
-userRouter.put("/:id/change-password", [
-    authMiddleware_1.default,
-    (0, express_validator_1.check)("newPassword", "Password must be 8 or more characters").isLength({
-        min: 8,
-    }),
-], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const errors = (0, express_validator_1.validationResult)(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+// Route to change user password
+userRouter.put("/:id/change-password", authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Manually validate new password
+    const errors = validatePasswordChange(req);
+    if (errors.length > 0) {
+        return res.status(400).json({ errors });
     }
     const { id } = req.params;
     const { newPassword } = req.body;
@@ -58,3 +66,51 @@ userRouter.put("/:id/change-password", [
     }
 }));
 exports.default = userRouter;
+// import express, { Request, Response } from "express";
+// import User from "../models/User";
+// import authMiddleware from "../middlewares/authMiddleware";
+// import { check, validationResult } from "express-validator";
+// import bcrypt from "bcryptjs";
+// const userRouter = express.Router();
+// userRouter.get("/:id", authMiddleware, async (req: Request, res: Response) => {
+//   try {
+//     const user = await User.findById(req.params.id);
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+//     return res.json(user);
+//   } catch (error) {
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// });
+// userRouter.put(
+//   "/:id/change-password",
+//   [
+//     authMiddleware,
+//     check("newPassword", "Password must be 8 or more characters").isLength({
+//       min: 8,
+//     }),
+//   ],
+//   async (req: Request, res: Response) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+//     const { id } = req.params;
+//     const { newPassword } = req.body;
+//     try {
+//       const user = await User.findById(id);
+//       if (!user) {
+//         return res.status(404).json({ msg: "User not found" });
+//       }
+//       const salt = await bcrypt.genSalt(10);
+//       user.password = await bcrypt.hash(newPassword, salt);
+//       await user.save();
+//       return res.status(200).json({ msg: "Password updated successfully" });
+//     } catch (err) {
+//       console.error((err as Error).message);
+//       return res.status(500).send("Server error");
+//     }
+//   }
+// );
+// export default userRouter;
