@@ -51,8 +51,11 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 app.use(express.json());
 app.use(
   cors({
-    origin: "*",
+    origin: 'http://localhost:3000', // Replace with the actual frontend URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
   })
+);
 );
 app.use("/auth", authRoutes);
 app.use("/getDocuments", documentRouter);
