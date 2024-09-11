@@ -49,7 +49,11 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use("/auth", authRoutes);
 app.use("/getDocuments", documentRouter);
 app.use("/user", userRouter);
