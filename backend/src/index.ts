@@ -60,6 +60,11 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  console.log("Request Origin:", req.headers.origin);
+  next();
+});
+
 app.options("*", cors());
 
 app.use("/auth", authRoutes);
