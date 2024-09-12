@@ -54,7 +54,6 @@ app.use(express.json());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL, // Allow both the Vercel frontend and localhost in development
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders: "Content-Type, Authorization",
     credentials: true, // Allow cookies/authentication headers to be passed
     optionsSuccessStatus: 204,
