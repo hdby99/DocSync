@@ -31,11 +31,11 @@ require("dotenv").config();
 const app = express();
 const httpServer = createServer(app);
 
-const allowedOrigins = process.env.FRONTEND_URL || "http://localhost:3000";
+// const allowedOrigins = process.env.FRONTEND_URL || "http://localhost:3000";
 
 const io = new Server(httpServer, {
   cors: {
-    origin: allowedOrigins,
+    origin: process.env.FRONTEND_URL,
   },
 });
 
@@ -53,7 +53,7 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 app.use(express.json());
 app.use(
   cors({
-    origin: allowedOrigins, // Allow both the Vercel frontend and localhost in development
+    origin: process.env.FRONTEND_URL, // Allow both the Vercel frontend and localhost in development
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders: "Content-Type, Authorization",
     credentials: true, // Allow cookies/authentication headers to be passed
