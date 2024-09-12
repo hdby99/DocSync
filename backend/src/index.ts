@@ -51,7 +51,7 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000", // Replace with the actual frontend URL
+    origin: process.env.FRONTEND_URL || "http://localhost:3000", // Replace with the actual frontend URL
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders: "Content-Type, Authorization",
     preflightContinue: false,
