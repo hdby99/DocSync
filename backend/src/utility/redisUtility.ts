@@ -3,8 +3,8 @@ import { createClient } from "redis";
 const redisClient = createClient({
   url: process.env.REDIS_URL,
   socket: {
-    tls: true,
-    rejectUnauthorized: false, // Accept self-signed certificates
+    tls: `${process.env.REDIS_URL}`.match(/rediss:/) != null,
+    rejectUnauthorized: false,
     reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
   },
 });
@@ -28,26 +28,24 @@ redisClient.on("end", () => {
   console.log("Redis connection closed.");
 });
 
-// Utility: Add user to Redis
 export const addUserToRedis = async (
   documentId: string,
   userId: string,
   socketId: string
 ) => {
   try {
-    await redisClient.hSet(documentId, userId, socketId); // Store userId and corresponding socketId
+    await redisClient.hSet(documentId, userId, socketId);
   } catch (err) {
     console.error("Error adding user to Redis:", err);
   }
 };
 
-// Utility: Remove user from Redis
 export const removeUserFromRedis = async (
   documentId: string,
   userId: string
 ) => {
   try {
-    await redisClient.hDel(documentId, userId); // Remove user from Redis when they disconnect
+    await redisClient.hDel(documentId, userId);
     console.log("User removed from Redis");
   } catch (err) {
     console.error("Error removing user from Redis:", err);
