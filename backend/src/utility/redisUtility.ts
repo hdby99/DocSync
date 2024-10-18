@@ -4,7 +4,7 @@ const redisClient = createClient({
   url: process.env.REDIS_URL,
   socket: {
     tls: true,
-    rejectUnauthorized: false, // Accept self-signed certificates
+    ca: [],
     reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
   },
 });
