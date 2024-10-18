@@ -1,13 +1,15 @@
 import { createClient } from "redis";
 
 const redisClient = createClient({
-  url: `${process.env.REDIS_URL}`,
+  url: process.env.REDIS_URL,
   socket: {
-    tls: true, // Enable TLS
+    tls: true,
     rejectUnauthorized: false, // Accept self-signed certificates
-    reconnectStrategy: (retries) => Math.min(retries * 100, 3000), // Retry connection if Redis disconnects
+    reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
   },
 });
+
+// ... rest of your code
 
 // Connecting with event listeners
 redisClient
