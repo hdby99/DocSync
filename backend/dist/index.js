@@ -29,9 +29,10 @@ const redis_1 = require("redis");
 require("dotenv").config();
 const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
+// const allowedOrigins = process.env.FRONTEND_URL || "http://localhost:3000";
 const io = new socket_io_1.Server(httpServer, {
     cors: {
-        origin: "*",
+        origin: process.env.FRONTEND_URL,
     },
 });
 const pubClient = (0, redis_1.createClient)({ url: process.env.REDIS_URL }); // Redis URL from Render
@@ -43,7 +44,17 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 });
 // Middleware
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: "*", // Allow both the Vercel frontend and localhost in development
+    allowedHeaders: "Content-Type, Authorization",
+    credentials: true, // Allow cookies/authentication headers to be passed
+    optionsSuccessStatus: 204,
+}));
+app.use((req, res, next) => {
+    console.log("Request Origin:", req.headers.origin);
+    next();
+});
+app.options("*", (0, cors_1.default)());
 app.use("/auth", authRoutes_1.default);
 app.use("/getDocuments", getDocumentRoutes_1.default);
 app.use("/user", userRouter_1.default);

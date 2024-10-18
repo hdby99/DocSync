@@ -3,6 +3,8 @@ import { createClient } from "redis";
 const redisClient = createClient({
   url: `${process.env.REDIS_URL}`,
   socket: {
+    tls: true, // Enable TLS
+    rejectUnauthorized: false, // Accept self-signed certificates
     reconnectStrategy: (retries) => Math.min(retries * 100, 3000), // Retry connection if Redis disconnects
   },
 });

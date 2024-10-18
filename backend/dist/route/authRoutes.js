@@ -17,7 +17,6 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const User_1 = __importDefault(require("../models/User"));
 const router = express_1.default.Router();
-// Helper function to manually validate input
 const validateSignup = (req) => {
     const { name, email, password } = req.body;
     const errors = [];
