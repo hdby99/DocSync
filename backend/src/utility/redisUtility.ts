@@ -4,18 +4,16 @@ const redisClient = createClient({
   url: process.env.REDIS_TEMPORARY_URL,
   socket: {
     reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
+    tls: true,
+    rejectUnauthorized: false,
   },
 });
 
-// ... rest of your code
-
-// Connecting with event listeners
 redisClient
   .connect()
   .then(() => console.log("Redis connected"))
   .catch((err) => console.error("Redis Connection Error:", err));
 
-// Event listeners for better visibility
 redisClient.on("error", (err) => {
   console.error("Redis Error:", err);
 });

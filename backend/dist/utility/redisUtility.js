@@ -12,19 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearDocumentFromRedis = exports.getDocumentUsersFromRedis = exports.removeUserFromRedis = exports.addUserToRedis = void 0;
 const redis_1 = require("redis");
 const redisClient = (0, redis_1.createClient)({
-    url: `${process.env.REDIS_URL}`,
+    url: process.env.REDIS_TEMPORARY_URL,
     socket: {
-        tls: true, // Enable TLS
-        rejectUnauthorized: false, // Accept self-signed certificates
-        reconnectStrategy: (retries) => Math.min(retries * 100, 3000), // Retry connection if Redis disconnects
+        reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
     },
 });
-// Connecting with event listeners
 redisClient
     .connect()
     .then(() => console.log("Redis connected"))
     .catch((err) => console.error("Redis Connection Error:", err));
-// Event listeners for better visibility
 redisClient.on("error", (err) => {
     console.error("Redis Error:", err);
 });
@@ -34,20 +30,18 @@ redisClient.on("reconnecting", () => {
 redisClient.on("end", () => {
     console.log("Redis connection closed.");
 });
-// Utility: Add user to Redis
 const addUserToRedis = (documentId, userId, socketId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield redisClient.hSet(documentId, userId, socketId); // Store userId and corresponding socketId
+        yield redisClient.hSet(documentId, userId, socketId);
     }
     catch (err) {
         console.error("Error adding user to Redis:", err);
     }
 });
 exports.addUserToRedis = addUserToRedis;
-// Utility: Remove user from Redis
 const removeUserFromRedis = (documentId, userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield redisClient.hDel(documentId, userId); // Remove user from Redis when they disconnect
+        yield redisClient.hDel(documentId, userId);
         console.log("User removed from Redis");
     }
     catch (err) {
