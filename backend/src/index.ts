@@ -101,6 +101,11 @@ io.on("connection", (socket: Socket) => {
       console.log("rooms in socket", socket.rooms);
       console.log("document created is", document);
 
+      console.log("Emitting load-document:", {
+        data: document.data,
+        title: document.title,
+      });
+
       await addCollaborator(documentId, userId);
 
       // Fetch all users currently connected to the document from Redis
