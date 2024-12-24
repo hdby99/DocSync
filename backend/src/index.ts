@@ -111,6 +111,10 @@ io.on("connection", (socket: Socket) => {
 
       // Send the document content to the user who joined
       socket.emit("load-document", document.data, document.title);
+
+      console.log("Document title is", document.title);
+      console.log("document data is", document.data);
+
       console.log("collaborators are", await getCollaborators(documentId));
 
       // const chats = await Chat.find({ documentId }).sort({ createdAt: 1 });

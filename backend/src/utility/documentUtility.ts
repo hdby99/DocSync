@@ -5,6 +5,9 @@ import mongoose from "mongoose";
 export const findOrCreateDocument = async (documentId: string) => {
   try {
     const document = await Document.findById(documentId);
+
+    console.log("Document fetched/created:", document);
+
     if (document) return document;
 
     // Create a new document if it doesn't exist
