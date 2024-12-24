@@ -35,7 +35,7 @@ const io = new socket_io_1.Server(httpServer, {
         origin: process.env.FRONTEND_URL,
     },
 });
-const pubClient = (0, redis_1.createClient)({ url: process.env.REDIS_URL }); // Redis URL from Render
+const pubClient = (0, redis_1.createClient)({ url: process.env.REDIS_TEMPORARY_URL }); // Redis URL from Render
 const subClient = pubClient.duplicate();
 pubClient.on("error", (err) => console.error("Redis Client Error", err));
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
