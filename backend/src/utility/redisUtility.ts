@@ -1,7 +1,7 @@
 import { createClient } from "redis";
 
 const redisClient = createClient({
-  url: process.env.REDIS_TEMPORARY_URL,
+  url: process.env.REDIS_URL,
   // socket: {
   //   reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
   //   tls: true,

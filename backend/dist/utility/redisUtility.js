@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearDocumentFromRedis = exports.getDocumentUsersFromRedis = exports.removeUserFromRedis = exports.addUserToRedis = void 0;
 const redis_1 = require("redis");
 const redisClient = (0, redis_1.createClient)({
-    url: process.env.REDIS_TEMPORARY_URL,
+    url: process.env.REDIS_URL,
     // socket: {
     //   reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
     //   tls: true,
