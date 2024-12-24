@@ -39,7 +39,7 @@ const io = new Server(httpServer, {
   },
 });
 
-const pubClient = createClient({ url: process.env.REDIS_TEMPORARY_URL }); // Redis URL from Render
+const pubClient = createClient({ url: process.env.REDIS_URL }); // Redis URL from Render
 const subClient = pubClient.duplicate();
 
 pubClient.on("error", (err) => console.error("Redis Client Error", err));
