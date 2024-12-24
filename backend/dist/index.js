@@ -89,6 +89,8 @@ io.on("connection", (socket) => {
             io.to(documentId).emit("update-users", documentUsers);
             // Send the document content to the user who joined
             socket.emit("load-document", document.data, document.title);
+            console.log("Document title is", document.title);
+            console.log("document data is", document.data);
             console.log("collaborators are", yield (0, documentUtility_1.getCollaborators)(documentId));
             // const chats = await Chat.find({ documentId }).sort({ createdAt: 1 });
             // socket.emit("load-chats", chats);

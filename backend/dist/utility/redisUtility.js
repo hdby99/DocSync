@@ -13,9 +13,11 @@ exports.clearDocumentFromRedis = exports.getDocumentUsersFromRedis = exports.rem
 const redis_1 = require("redis");
 const redisClient = (0, redis_1.createClient)({
     url: process.env.REDIS_TEMPORARY_URL,
-    socket: {
-        reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
-    },
+    // socket: {
+    //   reconnectStrategy: (retries) => Math.min(retries * 100, 3000),
+    //   tls: true,
+    //   rejectUnauthorized: false,
+    // },
 });
 redisClient
     .connect()

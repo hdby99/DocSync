@@ -19,6 +19,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const findOrCreateDocument = (documentId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const document = yield document_1.default.findById(documentId);
+        console.log("Document fetched/created:", document);
         if (document)
             return document;
         // Create a new document if it doesn't exist
